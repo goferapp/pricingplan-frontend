@@ -16,7 +16,7 @@
     "redux": "^4.0.5"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "HOST=localhost.pricingplan-dotslash.gofer.ml react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

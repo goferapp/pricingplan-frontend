@@ -19,7 +19,8 @@ class Home extends React.Component{
             plans: [],
             newPlanName: '',
             newPlanPrice: '',
-            newPlanFeatures: []
+            newPlanFeatures: [],
+            userPlans: []
         }
         this.setPricingPlan = this.setPricingPlan.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -33,14 +34,15 @@ class Home extends React.Component{
     }
 
 
-    async componentDidMount(){
+    async componentWillMount(){
         console.log("component mounted");
         await window.Gofer.getContext()
         .then((response)=>{
             let pricingPlan = '';
             if (response.pricingPlan == "NOT SET") pricingPlan="";
             else pricingPlan = response.pricingPlan
-            this.setState({pricingPlanId:pricingPlan, allowedPlans:3, userId: response.user.id});            
+            this.setState({pricingPlanId:pricingPlan, allowedPlans:3, userId: response.user.id});
+            this.getUserCreatedPlans();
             axios({
                 method: 'get',
                 url: BASE_URL
@@ -54,6 +56,7 @@ class Home extends React.Component{
         .catch((error)=>{
             console.log("getContext issues");
         })
+        this.setState({loading:false});
     }    
 
 
@@ -77,24 +80,19 @@ class Home extends React.Component{
         }
     }
 
+    getUserCreatedPlans(){
+        axios({
+            method: 'get',
+            url: BASE_URL + "userCreatedPlans?userId=" + this.state.userId,
+        })
+        .then((response)=>{
+            this.setState({userPlans:response.data.data});
+        })
+        .catch((error)=>console.log(error));            
+    }
+
     handleSubmit(event){
-        event.preventDefault();
-        console.log(this.state.newPlanName, this.state.newPlanPrice, this.state.newPlanFeatures, this.state.userId);        
-
-
-        // axios.post(BASE_URL+'newUserPlan', {
-        //     body:{
-        //         name:this.state.newPlanName, 
-        //         price:this.state.newPlanPrice, 
-        //         description:this.state.newPlanFeatures, 
-        //         userId:this.state.userId
-        //     }            
-        // })
-        // .then((response)=>{
-        //     console.log(response);
-        // })
-        // .catch((error)=>console.log(error));        
-
+        event.preventDefault();           
         axios({
             method: 'post',
             url: BASE_URL + "newUserPlan",
@@ -105,8 +103,8 @@ class Home extends React.Component{
                 "userId":this.state.userId
             }
         })
-        .then((response)=>{
-            console.log(response);
+        .then((response)=>{    
+            this.getUserCreatedPlans();        
         })
         .catch((error)=>console.log(error));        
     }
@@ -142,23 +140,33 @@ class Home extends React.Component{
                     Plan Description <textarea onChange={(e)=>this.handleChange(e,"description")} />
                 </form>
                 <input type="submit" value="Add New Plan" onClick={this.handleSubmit} />
+                <h5>User Created Plans</h5>
+                {this.state.userPlans.map((item,key)=>{
+                    return (
+                        <span>   
+                            <h3>Plane Name : {item.name}</h3>
+                            <p>Plan Price : {item.price}</p>
+                            <p>Plan Description : {item.description}</p>
+                        </span>
+                    )
+                })}
             </div>
         )
     }
 
     render(){
-        // if(this.state.loading){
-        //     return (
-        //         <Loader 
-        //             type="Puff"
-        //             color="#00BFFF"
-        //             height={100}
-        //             width={100}
-        //             timeout={3000} //3 secs
-        //             style={{marginLeft:"50%"}}
-        //         />
-        //     )
-        // }
+        if(this.state.loading){
+            return (
+                <Loader 
+                    type="Puff"
+                    color="#00BFFF"
+                    height={100}
+                    width={100}
+                    timeout={3000} //3 secs
+                    style={{marginLeft:"50%"}}
+                />
+            )
+        }
         return(            
             <div>
                 <h1>Pricing Plans</h1>
