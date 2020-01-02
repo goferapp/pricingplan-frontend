@@ -5,8 +5,8 @@ import Loader from 'react-loader-spinner'
 import '../styles/plans.scss';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
-const BASE_URL = "http://localhost:8080/";
-// const BASE_URL = 'https://ppnode.dotslash227.now.sh/';
+// const BASE_URL = "http://localhost:8080/";
+const BASE_URL = 'https://ppnode.dotslash227.now.sh/';
 
 class Home extends React.Component{
     constructor(props){
