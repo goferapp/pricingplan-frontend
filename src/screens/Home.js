@@ -132,24 +132,38 @@ class Home extends React.Component{
 
     renderPlanForm(){
         return(
-            <div style={{marginLeft:"auto", marginRight:"auto"}}>
+            <div>
                 <h3>Add a new plan</h3>
                 <form onSubmit={this.randomFunction}>
-                    Name of Plan: <input type="text" name="plan-name" onChange={(e)=>this.handleChange(e,"name")} /><br />
-                    Price of Plan : <input type="text" name="plan-price" onChange={(e)=>this.handleChange(e, "price")} /><br />
-                    Plan Description <textarea onChange={(e)=>this.handleChange(e,"description")} />
-                </form>
-                <input type="submit" value="Add New Plan" onClick={this.handleSubmit} />
-                <h5>User Created Plans</h5>
-                {this.state.userPlans.map((item,key)=>{
-                    return (
-                        <span>   
-                            <h3>Plane Name : {item.name}</h3>
-                            <p>Plan Price : {item.price}</p>
-                            <p>Plan Description : {item.description}</p>
-                        </span>
-                    )
-                })}
+                    <div className="form-group">
+                        <label for="planName">Enter Name of Plan</label>
+                        <input type="text" className="form-control" name="plan-name" onChange={(e)=>this.handleChange(e,"name")} /><br />
+                        <small className="form-text text-muted">It is a compulsory field</small>
+                    </div>
+                    <div className="form-group">
+                        <label for="planName">Enter Price of the Plan</label>
+                        <input type="number" className="form-control" name="plan-name" onChange={(e)=>this.handleChange(e,"price")} /><br />
+                        <small className="form-text text-muted">Only numbers are accepted as input.</small>
+                    </div>                    
+                    <div className="form-group">
+                        <label for="planName">Enter description of the plan</label>
+                        <textarea onChange={(e)=>this.handleChange(e,"description")} className="form-control" rows="3" />
+                        <small className="form-text text-muted">Can Contain HTML.</small>
+                    </div>                    
+                    <input type="submit" className="btn btn-primary" value="Add New Plan" onClick={this.handleSubmit} />
+                </form>                
+                <hr />
+                <h5>Plans Already Created By You</h5>
+                <hr />
+                <div className="row">                    
+                    {this.state.userPlans.map((item,key)=>{
+                        return(
+                            <div className="col-4">
+                                <Plan planData={item} key={key} noBuyButton />
+                            </div>
+                        )                        
+                    })}
+                </div>                
             </div>
         )
     }
@@ -168,8 +182,8 @@ class Home extends React.Component{
             )
         }
         return(            
-            <div>
-                <h1>Pricing Plans</h1>
+            <div className="center">
+                <h1 className="center">Pricing Plans Demo</h1>
                 {(!this.state.pricingPlanId) ? this.renderPricingPlans() : this.renderPlanForm()}
             </div>            
         )

@@ -13,7 +13,7 @@ class Plan extends React.Component{
     }
 
     render(){
-        const {name, features, price ,id} = this.props.planData;        
+        const {name, features, description, price ,id} = this.props.planData;        
         return(
             <div className="pricing-item">
                 <div className="pricing-title">                
@@ -21,14 +21,18 @@ class Plan extends React.Component{
                 </div>
                 <div className="pricing-value">${price}                
                 </div>
+                {(features) &&
                 <ul className="pricing-features">                                 
                     {features.map((item, key)=>{                        
                         return <li key={key}>{item}</li>;
                     })}                           
-                </ul>
-                <button className="button" onClick={()=>this.props.addPlan(name)}>
-                    Select This Plan
-                </button>
+                </ul>}
+                {(description) && <p>{description}</p>}
+                {(!this.props.noBuyButton) &&
+                    <button className="button" onClick={()=>this.props.addPlan(name)}>
+                        Select This Plan
+                    </button>
+                }                
             </div>
         )
     }

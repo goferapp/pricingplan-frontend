@@ -3,7 +3,11 @@ import Home from './screens/Home';
 
 class App extends React.Component{
   render(){
-    return <Home />;
+    return (
+      <div className="container">
+        <Home />
+      </div>    
+    );
   }
 }
 
